@@ -44,3 +44,20 @@ export async function createProduct(req: Request, res: Response) {
       });
    }
 }
+
+export async function listProducts(_: Request, res: Response) {
+   try {
+      const getProducts = await prisma.product.findMany({
+         orderBy: {
+            name: "asc",
+         },
+      });
+
+      res.status(200).json(serializeBigInt(getProducts));
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({
+         error: "Houve um erro inesperado ao buscar a lista de produtos.",
+      });
+   }
+}

@@ -1,4 +1,4 @@
-import router from "./routes/product.routes.js";
+import productRoutes from "./routes/product.routes.js";
 
 import express from "express";
 
@@ -6,6 +6,6 @@ const app = express();
 // middleware para JSON
 app.use(express.json());
 
-app.use("/products", router);
+app.use("/products", productRoutes);
 
 export default app;
