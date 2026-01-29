@@ -61,3 +61,28 @@ export async function listProducts(_: Request, res: Response) {
       });
    }
 }
+
+export async function getProductId(req: Request, res: Response) {
+   const id = Number(req.params.id);
+
+   if (Number.isNaN(id))
+      return res.status(400).json({ error: "O id informado não é um número." });
+
+   try {
+      const product = await prisma.product.findUnique({
+         where: {
+            id,
+         },
+      });
+
+      if (!product)
+         return res.status(404).json({ error: "Esse produto não existe." });
+
+      return res.status(200).json(serializeBigInt(product));
+   } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+         error: "Houve um erro ao buscar o produto pelo ID.",
+      });
+   }
+}
