@@ -1,88 +1,79 @@
-import { prisma } from "../../lib/prisma.js";
 import type { Request, Response } from "express";
 
 import serializeBigInt from "../utils/serializeBigInt.js";
 
-export async function createProduct(req: Request, res: Response) {
-   const { name, brand, category, code } = req.body;
+import {
+   validateCreateProduct,
+   validateProductId,
+} from "../validators/productValidator.js";
 
-   if (!name || !brand || !category) {
-      return res
-         .status(400)
-         .json({ error: "Campos obrigatórios não informados." });
-   }
+import {
+   createProduct,
+   findProductByNameAndBrand,
+   listProducts,
+   getProductById,
+} from "../services/productService.js";
 
-   // Impede cadastrar um produto com espaços no inicío ou final da string EX: "Sabão "
-   const normalizedName = name.trim();
-   const normalizedBrand = brand.trim();
-
-   const existingProduct = await prisma.product.findFirst({
-      where: {
-         name: { equals: normalizedName, mode: "insensitive" },
-         brand: { equals: normalizedBrand, mode: "insensitive" },
-      },
-   });
-
-   if (existingProduct)
-      return res.status(400).json({ error: "Esse produto já existe." });
-
+export async function createProductController(req: Request, res: Response) {
    try {
-      const product = await prisma.product.create({
-         data: {
-            name,
-            brand,
-            category,
-            code,
-         },
+      const data = validateCreateProduct(req.body);
+
+      const existing = await findProductByNameAndBrand(data.name, data.brand);
+
+      if (existing)
+         return res.status(409).json({ error: "Esse produto já existe." });
+
+      const product = await createProduct({
+         ...data,
+         code: req.body.code,
       });
 
       return res.status(201).json(serializeBigInt(product));
    } catch (error) {
+      if (error instanceof Error && error.message === "MISSING_FIELDS") {
+         return res
+            .status(400)
+            .json({ error: "Campos obrigatórios não informados." });
+      }
+
       console.error(error);
-      return res.status(500).json({
-         error: "Houve um erro ao cadastrar o produto.",
-      });
+      return res
+         .status(500)
+         .json({ error: "Houve um erro ao cadastrar o produto." });
    }
 }
 
-export async function listProducts(_: Request, res: Response) {
+export async function listProductController(_: Request, res: Response) {
    try {
-      const getProducts = await prisma.product.findMany({
-         orderBy: {
-            name: "asc",
-         },
-      });
+      const products = await listProducts();
 
-      res.status(200).json(serializeBigInt(getProducts));
+      return res.status(200).json(serializeBigInt(products));
    } catch (error) {
       console.error(error);
-      res.status(500).json({
+
+      return res.status(500).json({
          error: "Houve um erro inesperado ao buscar a lista de produtos.",
       });
    }
 }
 
-export async function getProductId(req: Request, res: Response) {
-   const id = Number(req.params.id);
-
-   if (Number.isNaN(id))
-      return res.status(400).json({ error: "O id informado não é um número." });
-
+export async function getProductIdController(req: Request, res: Response) {
    try {
-      const product = await prisma.product.findUnique({
-         where: {
-            id,
-         },
-      });
+      const id = validateProductId(req.params.id);
+      const product = await getProductById(id);
 
       if (!product)
          return res.status(404).json({ error: "Esse produto não existe." });
 
       return res.status(200).json(serializeBigInt(product));
    } catch (error) {
+      if (error instanceof Error && error.message === "INVALID_ID") {
+         return res.status(400).json({ error: "ID inválido." });
+      }
+
       console.error(error);
-      return res.status(500).json({
-         error: "Houve um erro ao buscar o produto pelo ID.",
-      });
+      return res
+         .status(500)
+         .json({ error: "Houve um erro ao buscar o produto pelo ID." });
    }
 }
