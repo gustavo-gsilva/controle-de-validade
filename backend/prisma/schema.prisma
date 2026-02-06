@@ -16,7 +16,7 @@ model Batch {
   entry_date      DateTime @db.Date
   status          String   @db.VarChar(20)
   created_at      DateTime @default(now()) @db.Timestamp(6)
-  updated_at      DateTime @default(now()) @db.Timestamp(6)
+  updated_at      DateTime @updatedAt @db.Timestamp(6)
   product         Product  @relation(fields: [product_id], references: [id], onUpdate: NoAction)
 
   @@index([product_id], map: "idx_batch_product_id")
@@ -31,7 +31,7 @@ model Product {
   code       String?  @db.VarChar(50)
   image_url  String?  @db.VarChar(255)
   created_at DateTime @default(now()) @db.Timestamp(6)
-  updated_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
   batch      Batch[]
 
   @@map("product")

@@ -1,10 +1,15 @@
 import { prisma } from "../../lib/prisma.js";
 
-export async function findProductByNameAndBrand(name: string, brand: string) {
+export async function findProductByNameAndBrand(
+   name: string,
+   brand: string,
+   category: string
+) {
    return prisma.product.findFirst({
       where: {
          name: { equals: name, mode: "insensitive" },
          brand: { equals: brand, mode: "insensitive" },
+         category: { equals: category, mode: "insensitive" },
       },
    });
 }
@@ -27,5 +32,12 @@ export async function listProducts() {
 export async function getProductById(id: number) {
    return prisma.product.findUnique({
       where: { id },
+   });
+}
+
+export async function updateProductById(id: number, data: any) {
+   return prisma.product.update({
+      where: { id },
+      data,
    });
 }
