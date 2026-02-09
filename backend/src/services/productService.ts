@@ -41,3 +41,7 @@ export async function updateProductById(id: number, data: any) {
       data,
    });
 }
+
+export async function deleteProductById(id: number) {
+   return prisma.product.delete({ where: { id } });
+}

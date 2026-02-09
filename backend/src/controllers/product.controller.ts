@@ -14,6 +14,7 @@ import {
    listProducts,
    getProductById,
    updateProductById,
+   deleteProductById,
 } from "../services/productService.js";
 
 export async function createProductController(req: Request, res: Response) {
@@ -99,11 +100,8 @@ export async function updateProductIdController(req: Request, res: Response) {
       const id = validateProductId(req.params.id);
       const existingProduct = await getProductById(id);
 
-      if (!existingProduct) {
-         return res.status(404).json({
-            error: "Esse produto não existe.",
-         });
-      }
+      if (!existingProduct)
+         return res.status(404).json({ error: "Esse produto não existe." });
 
       const product = await updateProductById(id, data);
 
@@ -127,5 +125,31 @@ export async function updateProductIdController(req: Request, res: Response) {
       res.status(500).json({
          error: "Houve um erro ao atualizar o produto pelo ID.",
       });
+   }
+}
+
+export async function deleteProductIdController(req: Request, res: Response) {
+   try {
+      const id = validateProductId(req.params.id);
+      const existingProduct = await getProductById(id);
+
+      if (!existingProduct)
+         return res.status(404).json({ error: "Esse produto não existe." });
+
+      const product = await deleteProductById(id);
+
+      return res.status(200).json(serializeBigInt(product));
+   } catch (error) {
+      if (
+         error instanceof Error &&
+         error.message === "O ID informado é invalido"
+      ) {
+         return res.status(400).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res
+         .status(500)
+         .json({ error: "Houve um erro ao deletar o produto pelo ID." });
    }
 }
