@@ -30,12 +30,14 @@ export async function createProductController(req: Request, res: Response) {
       if (existing)
          return res.status(409).json({ error: "Esse produto já existe." });
 
-      const product = await createProduct({
+      await createProduct({
          ...data,
          code: req.body.code,
       });
 
-      return res.status(201).json(serializeBigInt(product));
+      return res
+         .status(201)
+         .json({ message: "Produto cadastrado com sucesso." });
    } catch (error) {
       if (
          error instanceof Error &&
@@ -103,9 +105,11 @@ export async function updateProductIdController(req: Request, res: Response) {
       if (!existingProduct)
          return res.status(404).json({ error: "Esse produto não existe." });
 
-      const product = await updateProductById(id, data);
+      await updateProductById(id, data);
 
-      return res.status(200).json(serializeBigInt(product));
+      return res
+         .status(200)
+         .json({ message: "Produto atualizado com sucesso." });
    } catch (error) {
       if (
          error instanceof Error &&
@@ -136,9 +140,9 @@ export async function deleteProductIdController(req: Request, res: Response) {
       if (!existingProduct)
          return res.status(404).json({ error: "Esse produto não existe." });
 
-      const product = await deleteProductById(id);
+      await deleteProductById(id);
 
-      return res.status(200).json(serializeBigInt(product));
+      return res.status(200).json({ message: "Produto deletado com sucesso." });
    } catch (error) {
       if (
          error instanceof Error &&
