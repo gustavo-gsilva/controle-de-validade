@@ -14,6 +14,18 @@ export async function findProductByNameAndBrand(
    });
 }
 
+export async function findProductByBatchCode(
+   product_id: number,
+   batch_code: string
+) {
+   return prisma.batch.findFirst({
+      where: {
+         product_id,
+         batch_code: { equals: batch_code, mode: "insensitive" },
+      },
+   });
+}
+
 export async function createProduct(data: {
    name: string;
    brand: string;

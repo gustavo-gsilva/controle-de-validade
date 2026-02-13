@@ -20,6 +20,7 @@ model Batch {
   product         Product  @relation(fields: [product_id], references: [id], onUpdate: NoAction)
 
   @@index([product_id], map: "idx_batch_product_id")
+  @@unique([product_id, batch_code])
   @@map("batch")
 }
 
