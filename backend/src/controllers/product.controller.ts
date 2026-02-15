@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 
 import serializeBigInt from "../utils/serializeBigInt.js";
+import { AppError } from "../errors/AppError.js";
 
 import {
    validateProduct,
@@ -39,11 +40,8 @@ export async function createProductController(req: Request, res: Response) {
          .status(201)
          .json({ message: "Produto cadastrado com sucesso." });
    } catch (error) {
-      if (
-         error instanceof Error &&
-         error.message === "Campos obrigatórios não informados."
-      ) {
-         return res.status(400).json({ error: error.message });
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
       }
 
       console.error(error);
@@ -82,11 +80,8 @@ export async function getProductIdController(req: Request, res: Response) {
 
       return res.status(200).json(serializeBigInt(product));
    } catch (error) {
-      if (
-         error instanceof Error &&
-         error.message === "O ID informado é invalido"
-      ) {
-         return res.status(400).json({ error: error.message });
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
       }
 
       console.error(error);
@@ -111,18 +106,8 @@ export async function updateProductIdController(req: Request, res: Response) {
          .status(200)
          .json({ message: "Produto atualizado com sucesso." });
    } catch (error) {
-      if (
-         error instanceof Error &&
-         error.message === "Nenhum campo válido para atualização."
-      ) {
-         return res.status(400).json({ error: error.message });
-      }
-
-      if (
-         error instanceof Error &&
-         error.message === "O ID informado é invalido"
-      ) {
-         return res.status(400).json({ error: error.message });
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
       }
 
       console.error(error);
@@ -144,11 +129,8 @@ export async function deleteProductIdController(req: Request, res: Response) {
 
       return res.status(200).json({ message: "Produto deletado com sucesso." });
    } catch (error) {
-      if (
-         error instanceof Error &&
-         error.message === "O ID informado é invalido"
-      ) {
-         return res.status(400).json({ error: error.message });
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
       }
 
       console.error(error);

@@ -1,8 +1,10 @@
+import { AppError } from "../errors/AppError.js";
+
 export function validateProduct(data: any) {
    const { name, brand, category, code } = data;
 
    if (!name || !brand || !category) {
-      throw new Error("Campos obrigatórios não informados.");
+      throw new AppError("Campos obrigatórios não informados.");
    }
 
    return {
@@ -37,7 +39,7 @@ export function validateUpdateProduct(data: any) {
 
    // Se nenhum campo válido foi enviado → erro
    if (Object.keys(updateData).length === 0) {
-      throw new Error("Nenhum campo válido para atualização.");
+      throw new AppError("Nenhum campo válido para atualização.");
    }
 
    return updateData;
@@ -47,7 +49,7 @@ export function validateProductId(id: unknown): number {
    const parseId = Number(id);
 
    if (!Number.isInteger(parseId) || parseId <= 0) {
-      throw new Error("O ID informado é invalido");
+      throw new AppError("O ID informado é invalido");
    }
 
    return parseId;
