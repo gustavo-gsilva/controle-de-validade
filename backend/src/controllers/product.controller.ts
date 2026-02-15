@@ -120,10 +120,6 @@ export async function updateProductIdController(req: Request, res: Response) {
 export async function deleteProductIdController(req: Request, res: Response) {
    try {
       const id = validateProductId(req.params.id);
-      const existingProduct = await getProductById(id);
-
-      if (!existingProduct)
-         return res.status(404).json({ error: "Esse produto não existe." });
 
       await deleteProductById(id);
 

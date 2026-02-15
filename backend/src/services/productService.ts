@@ -1,5 +1,7 @@
 import { prisma } from "../../lib/prisma.js";
 
+import { AppError } from "../errors/AppError.js";
+
 export async function findProductByNameAndBrand(
    name: string,
    brand: string,
@@ -38,12 +40,17 @@ export async function createProduct(data: {
 export async function listProducts() {
    return prisma.product.findMany({
       orderBy: { name: "asc" },
+      where: {
+         deleted_at: null,
+      },
    });
 }
 
 export async function getProductById(id: number) {
    return prisma.product.findUnique({
-      where: { id },
+      where: {
+         id,
+      },
    });
 }
 
@@ -55,5 +62,33 @@ export async function updateProductById(id: number, data: any) {
 }
 
 export async function deleteProductById(id: number) {
-   return prisma.product.delete({ where: { id } });
+   const product = await getProductById(id);
+
+   if (!product) {
+      throw new AppError("Produto não encontrado.", 404);
+   }
+
+   if (product.deleted_at !== null) {
+      throw new AppError("Produto já está inativo.");
+   }
+
+   const activeBatches = await prisma.batch.count({
+      where: {
+         product_id: id,
+         status: "valid",
+      },
+   });
+
+   if (activeBatches > 0) {
+      throw new AppError(
+         "Não é possível excluir um produto que possui lotes ativos vinculados."
+      );
+   }
+
+   return prisma.product.update({
+      where: { id },
+      data: {
+         deleted_at: new Date(),
+      },
+   });
 }
