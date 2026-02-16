@@ -1,14 +1,12 @@
 import type { Request, Response } from "express";
 
-import {
-   getProductById,
-   findProductByBatchCode,
-} from "../services/productService.js";
+import { getProductById } from "../services/productService.js";
+import { findProductByBatchCode } from "../services/batchService.js";
+import { createBatch } from "../services/batchService.js";
 
 import { validateProductId } from "../validators/productValidator.js";
 import { validateBatchDates } from "../validators/batchValidator.js";
 import { AppError } from "../errors/AppError.js";
-import { createBatch } from "../services/batchService.js";
 
 export async function createBatchController(req: Request, res: Response) {
    try {
@@ -35,7 +33,6 @@ export async function createBatchController(req: Request, res: Response) {
          batch_code,
          expiration_date: expirationDate,
          entry_date: entryDate,
-         status,
       });
 
       return res.status(201).json({ message: "Lote cadastrado com sucesso." });

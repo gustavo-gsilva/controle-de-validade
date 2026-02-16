@@ -15,7 +15,7 @@ import {
    listProducts,
    getProductById,
    updateProductById,
-   deleteProductById,
+   inactivateProductById,
 } from "../services/productService.js";
 
 export async function createProductController(req: Request, res: Response) {
@@ -117,11 +117,11 @@ export async function updateProductIdController(req: Request, res: Response) {
    }
 }
 
-export async function deleteProductIdController(req: Request, res: Response) {
+export async function inactivateProductIdController(req: Request, res: Response) {
    try {
       const id = validateProductId(req.params.id);
 
-      await deleteProductById(id);
+      await inactivateProductById(id);
 
       return res.status(200).json({ message: "Produto deletado com sucesso." });
    } catch (error) {
