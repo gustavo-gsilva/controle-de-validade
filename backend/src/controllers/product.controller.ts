@@ -16,6 +16,7 @@ import {
    getProductById,
    updateProductById,
    inactivateProductById,
+   reactivateProductById,
 } from "../services/productService.js";
 
 export async function createProductController(req: Request, res: Response) {
@@ -117,7 +118,10 @@ export async function updateProductIdController(req: Request, res: Response) {
    }
 }
 
-export async function inactivateProductIdController(req: Request, res: Response) {
+export async function inactivateProductIdController(
+   req: Request,
+   res: Response
+) {
    try {
       const id = validateProductId(req.params.id);
 
@@ -133,5 +137,26 @@ export async function inactivateProductIdController(req: Request, res: Response)
       return res
          .status(500)
          .json({ error: "Houve um erro ao deletar o produto pelo ID." });
+   }
+}
+
+export async function reactivateProductIdController(req: Request, res: Response) {
+   try {
+      const id = validateProductId(req.params.id);
+
+      await reactivateProductById(id);
+
+      return res
+         .status(200)
+         .json({ message: "Produto reativado com sucesso." });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res
+         .status(500)
+         .json({ error: "Houve um erro ao reativar o produto pelo ID." });
    }
 }

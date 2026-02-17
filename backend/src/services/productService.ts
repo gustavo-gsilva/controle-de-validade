@@ -67,3 +67,22 @@ export async function inactivateProductById(id: number) {
       },
    });
 }
+
+export async function reactivateProductById(id: number) {
+   const product = await getProductById(id);
+
+   if (!product) {
+      throw new AppError("Produto não encontrado.", 404);
+   }
+
+   if (product.deleted_at === null) {
+      throw new AppError("Produto já está ativo.", 409);
+   }
+
+   return prisma.product.update({
+      where: { id },
+      data: {
+         deleted_at: null,
+      },
+   });
+}
