@@ -2,15 +2,19 @@ import type { Request, Response } from "express";
 
 import { getProductById } from "../services/productService.js";
 import { findProductByBatchCode } from "../services/batchService.js";
-import { createBatch } from "../services/batchService.js";
+import {
+   createBatch,
+   listBatchesProductById,
+} from "../services/batchService.js";
 
 import { validateProductId } from "../validators/productValidator.js";
 import { validateBatchDates } from "../validators/batchValidator.js";
 import { AppError } from "../errors/AppError.js";
+import serializeBigInt from "../utils/serializeBigInt.js";
 
 export async function createBatchController(req: Request, res: Response) {
    try {
-      const { batch_code, expiration_date, entry_date, status } = req.body;
+      const { batch_code, expiration_date, entry_date } = req.body;
       const { entryDate, expirationDate } = validateBatchDates(
          entry_date,
          expiration_date
@@ -45,5 +49,27 @@ export async function createBatchController(req: Request, res: Response) {
       return res
          .status(500)
          .json({ error: "Houve um erro ao cadastrar o lote do produto." });
+   }
+}
+
+export async function listBatchesByProductController(
+   req: Request,
+   res: Response
+) {
+   try {
+      const productId = validateProductId(req.params.productId);
+
+      const batches = await listBatchesProductById(productId);
+
+      return res.status(200).json(serializeBigInt(batches));
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res
+         .status(500)
+         .json({ error: "Erro ao listar lotes do produto." });
    }
 }
