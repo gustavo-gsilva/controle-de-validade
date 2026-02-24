@@ -45,7 +45,7 @@ export function validateUpdateProduct(data: any) {
    return updateData;
 }
 
-export function validateProductId(id: unknown): number {
+export function validateId(id: unknown): number {
    const parseId = Number(id);
 
    if (!Number.isInteger(parseId) || parseId <= 0) {

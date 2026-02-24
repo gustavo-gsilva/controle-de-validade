@@ -2,6 +2,12 @@ import { prisma } from "../../lib/prisma.js";
 
 import { AppError } from "../errors/AppError.js";
 
+type updateBatchData = {
+   batch_code: string;
+   entry_date: Date;
+   expiration_date: Date;
+};
+
 export async function createBatch(data: {
    product_id: number;
    batch_code: string;
@@ -22,6 +28,21 @@ export async function listBatchesProductById(productId: number) {
    return batches;
 }
 
+export async function updateBatchesProductById(
+   id: number,
+   data: updateBatchData
+) {
+   await ensureProductExists(id);
+
+   const batch = await prisma.batch.update({
+      where: { id },
+      data,
+   });
+
+   return batch;
+}
+
+// Função que buscar apenas um único ID
 export async function ensureProductExists(id: number) {
    const product = await prisma.product.findUnique({
       where: { id },

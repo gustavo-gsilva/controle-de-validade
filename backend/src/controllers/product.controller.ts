@@ -5,7 +5,7 @@ import { AppError } from "../errors/AppError.js";
 
 import {
    validateProduct,
-   validateProductId,
+   validateId,
    validateUpdateProduct,
 } from "../validators/productValidator.js";
 
@@ -73,7 +73,7 @@ export async function listProductController(_: Request, res: Response) {
 
 export async function getProductIdController(req: Request, res: Response) {
    try {
-      const id = validateProductId(req.params.id);
+      const id = validateId(req.params.id);
       const product = await getProductById(id);
 
       if (!product)
@@ -95,7 +95,7 @@ export async function getProductIdController(req: Request, res: Response) {
 export async function updateProductIdController(req: Request, res: Response) {
    try {
       const data = validateUpdateProduct(req.body);
-      const id = validateProductId(req.params.id);
+      const id = validateId(req.params.id);
       const existingProduct = await getProductById(id);
 
       if (!existingProduct)
@@ -123,7 +123,7 @@ export async function inactivateProductIdController(
    res: Response
 ) {
    try {
-      const id = validateProductId(req.params.id);
+      const id = validateId(req.params.id);
 
       await inactivateProductById(id);
 
@@ -142,7 +142,7 @@ export async function inactivateProductIdController(
 
 export async function reactivateProductIdController(req: Request, res: Response) {
    try {
-      const id = validateProductId(req.params.id);
+      const id = validateId(req.params.id);
 
       await reactivateProductById(id);
 

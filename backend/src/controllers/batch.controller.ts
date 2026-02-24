@@ -5,9 +5,10 @@ import { findProductByBatchCode } from "../services/batchService.js";
 import {
    createBatch,
    listBatchesProductById,
+   updateBatchesProductById,
 } from "../services/batchService.js";
 
-import { validateProductId } from "../validators/productValidator.js";
+import { validateId } from "../validators/productValidator.js";
 import { validateBatchDates } from "../validators/batchValidator.js";
 import { AppError } from "../errors/AppError.js";
 import serializeBigInt from "../utils/serializeBigInt.js";
@@ -20,7 +21,7 @@ export async function createBatchController(req: Request, res: Response) {
          expiration_date
       );
 
-      const productId = validateProductId(Number(req.params.productId));
+      const productId = validateId(Number(req.params.productId));
       const product = await getProductById(productId);
       const existingBatch = await findProductByBatchCode(productId, batch_code);
 
@@ -57,7 +58,7 @@ export async function listBatchesByProductController(
    res: Response
 ) {
    try {
-      const productId = validateProductId(req.params.productId);
+      const productId = validateId(req.params.productId);
 
       const batches = await listBatchesProductById(productId);
 
@@ -71,5 +72,38 @@ export async function listBatchesByProductController(
       return res
          .status(500)
          .json({ error: "Erro ao listar lotes do produto." });
+   }
+}
+
+export async function updateBatchesByProductController(
+   req: Request,
+   res: Response
+) {
+   try {
+      const { batch_code, entry_date, expiration_date } = req.body;
+
+      const { entryDate, expirationDate } = validateBatchDates(
+         entry_date,
+         expiration_date
+      );
+
+      const id = validateId(req.params.id);
+
+      await updateBatchesProductById(id, {
+         batch_code,
+         entry_date: entryDate,
+         expiration_date: expirationDate,
+      });
+
+      return res.status(200).json({ message: "Lote atualizado com sucesso." });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res
+         .status(500)
+         .json({ error: "Erro ao atualizar as informações do lote." });
    }
 }
