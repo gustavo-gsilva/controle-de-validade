@@ -49,6 +49,7 @@ export async function updateProductById(id: number, data: any) {
    });
 }
 
+// Função de soft delete
 export async function inactivateProductById(id: number) {
    const product = await getProductById(id);
 

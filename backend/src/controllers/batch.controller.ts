@@ -6,6 +6,7 @@ import {
    createBatch,
    listBatchesProductById,
    updateBatchesProductById,
+   deleteBatchById,
 } from "../services/batchService.js";
 
 import { validateId } from "../validators/productValidator.js";
@@ -105,5 +106,22 @@ export async function updateBatchesByProductController(
       return res
          .status(500)
          .json({ error: "Erro ao atualizar as informações do lote." });
+   }
+}
+
+export async function deleteBatchByIdController(req: Request, res: Response) {
+   try {
+      const id = validateId(req.params.id);
+
+      await deleteBatchById(id);
+
+      return res.status(200).json({ message: "Lote deletado com sucesso." });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res.status(500).json({ error: "Erro ao deletar o lote." });
    }
 }

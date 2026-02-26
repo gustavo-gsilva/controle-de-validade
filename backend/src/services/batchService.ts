@@ -42,7 +42,7 @@ export async function updateBatchesProductById(
    return batch;
 }
 
-// Função que buscar apenas um único ID
+// Função que buscar apenas um único ID de produto
 export async function ensureProductExists(id: number) {
    const product = await prisma.product.findUnique({
       where: { id },
@@ -54,6 +54,36 @@ export async function ensureProductExists(id: number) {
    }
 
    return product;
+}
+
+// Função de soft delete
+export async function deleteBatchById(id: number) {
+   const batch = await ensureBatchExists(id);
+
+   if (batch.deleted_at !== null) {
+      throw new AppError("Lote já está excluído.");
+   }
+
+   return prisma.batch.update({
+      where: { id },
+      data: {
+         deleted_at: new Date(),
+      },
+   });
+}
+
+// Função que buscar apenas um único ID de lote
+export async function ensureBatchExists(id: number) {
+   const batch = await prisma.batch.findUnique({
+      where: { id },
+      select: { id: true, deleted_at: true },
+   });
+
+   if (!batch) {
+      throw new AppError("Lote não encontrado.", 404);
+   }
+
+   return batch;
 }
 
 export async function findProductByBatchCode(
