@@ -7,6 +7,7 @@ import {
    listBatchesProductById,
    updateBatchesProductById,
    deleteBatchById,
+   getExpiredBatches,
 } from "../services/batchService.js";
 
 import { validateId } from "../validators/productValidator.js";
@@ -123,5 +124,21 @@ export async function deleteBatchByIdController(req: Request, res: Response) {
 
       console.error(error);
       return res.status(500).json({ error: "Erro ao deletar o lote." });
+   }
+}
+
+export async function getExpiredBatchesController(_: Request, res: Response) {
+   try {
+      const data = await getExpiredBatches();
+      const total = data.length;
+
+      return res.status(200).json(serializeBigInt({ data, total }));
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res.status(500).json({ error: "Erro ao listar lotes vencidos." });
    }
 }

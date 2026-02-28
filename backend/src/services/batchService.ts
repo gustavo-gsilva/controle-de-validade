@@ -86,6 +86,19 @@ export async function ensureBatchExists(id: number) {
    return batch;
 }
 
+export async function getExpiredBatches() {
+   const today = new Date();
+
+   return prisma.batch.findMany({
+      where: {
+         expiration_date: {
+            lt: today,
+         },
+         deleted_at: null,
+      },
+   });
+}
+
 export async function findProductByBatchCode(
    product_id: number,
    batch_code: string

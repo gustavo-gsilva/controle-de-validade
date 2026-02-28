@@ -4,11 +4,13 @@ import {
    createBatchController,
    listBatchesByProductController,
    updateBatchesByProductController,
-   deleteBatchByIdController
+   deleteBatchByIdController,
+   getExpiredBatchesController,
 } from "../controllers/batch.controller.js";
 
 const router = Router();
 
+router.get("/expired", getExpiredBatchesController);
 router.post("/:productId", createBatchController);
 router.get("/:productId", listBatchesByProductController);
 router.put("/:id", updateBatchesByProductController);
