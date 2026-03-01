@@ -99,6 +99,27 @@ export async function getExpiredBatches() {
    });
 }
 
+export async function getBatchesExpiringInDays(days: number) {
+   const today = new Date();
+   today.setHours(0, 0, 0, 0);
+
+   const futureDate = new Date();
+   futureDate.setDate(today.getDate() + days);
+
+   return prisma.batch.findMany({
+      where: {
+         expiration_date: {
+            gte: today,
+            lte: futureDate,
+         },
+         deleted_at: null,
+      },
+      orderBy: {
+         expiration_date: "asc",
+      },
+   });
+}
+
 export async function findProductByBatchCode(
    product_id: number,
    batch_code: string

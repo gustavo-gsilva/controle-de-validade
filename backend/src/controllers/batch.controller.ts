@@ -8,6 +8,7 @@ import {
    updateBatchesProductById,
    deleteBatchById,
    getExpiredBatches,
+   getBatchesExpiringInDays,
 } from "../services/batchService.js";
 
 import { validateId } from "../validators/productValidator.js";
@@ -140,5 +141,33 @@ export async function getExpiredBatchesController(_: Request, res: Response) {
 
       console.error(error);
       return res.status(500).json({ error: "Erro ao listar lotes vencidos." });
+   }
+}
+
+export async function getBatchesExpiringInDaysController(
+   req: Request,
+   res: Response
+) {
+   try {
+      let day = Number(req.query.days);
+
+      if (isNaN(day) || day <= 0 || day > 90) {
+         return res
+            .status(400)
+            .json({ error: "O parâmetro days deve ser um número maior que zero e menor que 91." });
+      }
+
+      const batchesExpiring = await getBatchesExpiringInDays(day);
+
+      return res.status(200).json(serializeBigInt(batchesExpiring));
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res
+         .status(500)
+         .json({ error: "Erro ao listar lotes que expiram em alguns dias." });
    }
 }
