@@ -154,7 +154,9 @@ export async function getBatchesExpiringInDaysController(
       if (isNaN(day) || day <= 0 || day > 90) {
          return res
             .status(400)
-            .json({ error: "O parâmetro days deve ser um número maior que zero e menor que 91." });
+            .json({
+               error: "O parâmetro days deve ser um número maior que zero e menor que 91.",
+            });
       }
 
       const batchesExpiring = await getBatchesExpiringInDays(day);
