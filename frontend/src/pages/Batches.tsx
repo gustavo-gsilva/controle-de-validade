@@ -1,3 +1,11 @@
-export default function Batches() {
-   return <h1>Lotes</h1>;
+import DashboardLayout from "../layouts/DashboardLayout";
+
+function Batches() {
+   return (
+      <DashboardLayout>
+         <h2>Lotes</h2>
+      </DashboardLayout>
+   );
 }
+
+export default Batches;

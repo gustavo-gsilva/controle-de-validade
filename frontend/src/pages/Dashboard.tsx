@@ -1,3 +1,13 @@
-export default function DashBoard() {
-   return <h1>DashBoard</h1>;
+import DashboardLayout from "../layouts/DashboardLayout";
+
+function DashBoard() {
+   return (
+      <div>
+         <DashboardLayout>
+            <h1>Dashboard</h1>
+         </DashboardLayout>
+      </div>
+   );
 }
+
+export default DashBoard;
