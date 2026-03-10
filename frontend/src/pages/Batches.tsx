@@ -3,7 +3,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 function Batches() {
    return (
       <DashboardLayout>
-         <h2>Lotes</h2>
+         <h2></h2>
       </DashboardLayout>
    );
 }

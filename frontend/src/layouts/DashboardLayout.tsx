@@ -1,4 +1,5 @@
 import Slidebar from "../components/SlideBar";
+import Header from "../components/Header";
 
 interface Props {
    children: React.ReactNode;
@@ -6,10 +7,14 @@ interface Props {
 
 function DashboardLayout({ children }: Props) {
    return (
-      <div className="flex">
+      <div className="flex h-screen bg-blue-50">
          <Slidebar />
 
-         <main>{children}</main>
+         <div className="flex flex-col flex-1">
+            <Header />
+
+            <main className="flex-1">{children}</main>
+         </div>
       </div>
    );
 }

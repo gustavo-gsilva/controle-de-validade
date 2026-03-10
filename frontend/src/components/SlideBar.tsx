@@ -29,9 +29,11 @@ function Slidebar() {
    return (
       <aside className="flex flex-col justify-between w-md h-screen bg-blue-950">
          <div className="flex flex-col">
-            <img className="w-32" src={logo} alt="Logo" />
+            <div>
+               <img className="w-28 ml-1" src={logo} alt="Logo" />
 
-            <div className="border border-b-gray-300 mt-3"></div>
+               <div className="border border-b-gray-400 mt-3"></div>
+            </div>
 
             <nav className="pr-5 pt-4">
                <ul>
@@ -63,7 +65,7 @@ function Slidebar() {
             <img
                className="rounded-4xl"
                src="https://placehold.co/40x40"
-               alt="Foto de perfil"
+               alt="foto de perfil"
             />
 
             <h3 className="text-2xl text-blue-100 font-medium">

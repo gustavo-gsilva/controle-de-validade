@@ -4,7 +4,23 @@ function DashBoard() {
    return (
       <div>
          <DashboardLayout>
-            <h1>Dashboard</h1>
+            <div className="flex justify-center">
+               <div>
+                  <p>Total de Produtos</p>
+               </div>
+
+               <div>
+                  <p>Lotes Válidos</p>
+               </div>
+
+               <div>
+                  <p>Próximos do Vencimento</p>
+               </div>
+
+               <div>
+                  <p>Lotes Vencidos</p>
+               </div>
+            </div>
          </DashboardLayout>
       </div>
    );
