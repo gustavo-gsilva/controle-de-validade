@@ -16,7 +16,7 @@ function Header() {
    return (
       <header className="w-full">
          <div className="h-31 flex justify-between items-center">
-            <h1 className="text-3xl font-medium ml-16">{title}</h1>
+            <h1 className="text-3xl font-medium ml-11">{title}</h1>
 
             <div className="flex items-center gap-36">
                <div className="flex gap-2">
@@ -25,7 +25,7 @@ function Header() {
                   <strong className="text-2xl">Placeholder!</strong>
                </div>
 
-               <div className="flex gap-10 mr-16">
+               <div className="flex gap-10 mr-11">
                   <button className="cursor-pointer">
                      <img
                         className="w-9"
