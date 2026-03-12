@@ -17,6 +17,19 @@ export async function createBatch(data: {
    return prisma.batch.create({ data });
 }
 
+export async function listBatchesValid() {
+   const today = new Date();
+
+   return prisma.batch.findMany({
+      where: {
+         expiration_date: {
+            gt: today,
+         },
+         deleted_at: null,
+      },
+   });
+}
+
 export async function listBatchesProductById(productId: number) {
    await ensureProductExists(productId);
 

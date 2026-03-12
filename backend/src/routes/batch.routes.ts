@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
    createBatchController,
+   listBatchesValidController,
    listBatchesByProductController,
    updateBatchesByProductController,
    deleteBatchByIdController,
@@ -13,6 +14,8 @@ const router = Router();
 
 router.get("/expired", getExpiredBatchesController);
 router.get("/expiring", getBatchesExpiringInDaysController);
+router.get("/valid", listBatchesValidController);
+
 router.post("/:productId", createBatchController);
 router.get("/:productId", listBatchesByProductController);
 router.put("/:id", updateBatchesByProductController);

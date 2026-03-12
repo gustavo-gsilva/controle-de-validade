@@ -13,6 +13,7 @@ const router = Router();
 
 router.post("/", createProductController);
 router.get("/", listProductController);
+
 router.get("/:id", getProductIdController);
 router.put("/:id", updateProductIdController);
 router.delete("/:id", inactivateProductIdController);

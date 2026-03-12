@@ -4,6 +4,7 @@ import { getProductById } from "../services/productService.js";
 import { findProductByBatchCode } from "../services/batchService.js";
 import {
    createBatch,
+   listBatchesValid,
    listBatchesProductById,
    updateBatchesProductById,
    deleteBatchById,
@@ -53,6 +54,21 @@ export async function createBatchController(req: Request, res: Response) {
       return res
          .status(500)
          .json({ error: "Houve um erro ao cadastrar o lote do produto." });
+   }
+}
+
+export async function listBatchesValidController(_: Request, res: Response) {
+   try {
+      const batchesValid = await listBatchesValid();
+
+      return res.json(serializeBigInt(batchesValid));
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res.status(500).json({ error: "Erro ao listar lotes válidos." });
    }
 }
 
@@ -152,11 +168,9 @@ export async function getBatchesExpiringInDaysController(
       let day = Number(req.query.days);
 
       if (isNaN(day) || day <= 0 || day > 90) {
-         return res
-            .status(400)
-            .json({
-               error: "O parâmetro days deve ser um número maior que zero e menor que 91.",
-            });
+         return res.status(400).json({
+            error: "O parâmetro days deve ser um número maior que zero e menor que 91.",
+         });
       }
 
       const batchesExpiring = await getBatchesExpiringInDays(day);
