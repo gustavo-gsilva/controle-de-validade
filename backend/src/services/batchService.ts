@@ -112,12 +112,12 @@ export async function getExpiredBatches() {
    });
 }
 
-export async function getBatchesExpiringInDays(days: number) {
+export async function getBatchesExpiringInDays() {
    const today = new Date();
    today.setHours(0, 0, 0, 0);
 
    const futureDate = new Date();
-   futureDate.setDate(today.getDate() + days);
+   futureDate.setDate(today.getDate() + 15);
 
    return prisma.batch.findMany({
       where: {
