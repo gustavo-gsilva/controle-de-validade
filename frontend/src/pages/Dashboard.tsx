@@ -13,118 +13,80 @@ import {
 import type { Batch } from "../types/batchTypes";
 
 function DashBoard() {
-   // Variável de estado que armazena um array baseado no type Product
+   // Variáveis de estado que armazenam arrays baseados nos types
    const [products, setProducts] = useState<Product[]>([]);
-
-   // Função que carrega os produtos e atualiza o estado products
-   async function loadProducts() {
-      try {
-         const data = await getProducts();
-
-         setProducts(data);
-      } catch (error) {
-         console.error(error);
-      }
-   }
-
-   useEffect(() => {
-      loadProducts();
-   }, []);
-
-   const totalQuantity = products.length;
-
-   // -- ! -- //
-
-   // Variável de estado que armazena um array baseado no type Batch
    const [batches, setBatches] = useState<Batch[]>([]);
-
-   // Função que carrega os lotes válidos e atualiza o estado batches
-   async function loadBatchesValid() {
-      try {
-         const data = await getBatchesValid();
-
-         setBatches(data);
-      } catch (error) {
-         console.error(error);
-      }
-   }
-
-   useEffect(() => {
-      loadBatchesValid();
-   }, []);
-
-   const totalBatches = batches.length;
-
-   // -- ! -- //
-
-   // Variável de estado que armazena um array baseado no type Batch
    const [expiring, setExpiring] = useState<Batch[]>([]);
-
-   // Função que carrega os lotes válidos e atualiza o estado batches
-   async function loadBatchesExpiring() {
-      try {
-         const data = await getBatchesExpiringInDays();
-
-         setExpiring(data);
-      } catch (error) {
-         console.error(error);
-      }
-   }
-
-   useEffect(() => {
-      loadBatchesExpiring();
-   }, []);
-
-   const totalExpiring = expiring.length;
-
-   // -- ! -- //
-
-   // Variável de estado que armazena um array baseado no type Batch
    const [expired, setExpired] = useState<Batch[]>([]);
 
-   // Função que carrega os lotes válidos e atualiza o estado batches
-   async function loadBatchesExpired() {
-      try {
-         const data = await getBatchesExpired();
-
-         setExpired(data);
-      } catch (error) {
-         console.error(error);
-      }
-   }
-
+   // Função que carrega os informações gerais e atualiza as variáveis de estado
    useEffect(() => {
-      loadBatchesExpired();
+      async function loadCardsDashboard() {
+         try {
+            const productsData = await getProducts();
+            const batchesValidData = await getBatchesValid();
+            const batchesExpiringData = await getBatchesExpiringInDays();
+            const batchesExpiredData = await getBatchesExpired();
+
+            setProducts(productsData);
+            setBatches(batchesValidData);
+            setExpiring(batchesExpiringData);
+            setExpired(batchesExpiredData);
+         } catch (error) {
+            console.error(error);
+         }
+      }
+
+      loadCardsDashboard();
    }, []);
 
-   const totalExpired = expired.length;
+   const productsQuantity = products.length;
+   const batchesValidQuantity = batches.length;
+   const batchesExpiringQuantity = expiring.length;
+   const batchesExpiredQuantity = expired.length;
 
    return (
       <div>
          <DashboardLayout>
             <div className="flex justify-between mx-11 py-8">
-               <div className="w-md h-44 bg-blue-500 rounded-2xl">
-                  <p>Total de Produtos</p>
+               <div className="w-md h-44 bg-blue-500 rounded-2xl p-8">
+                  <p className="text-2xl text-blue-50 font-medium">
+                     Total de Produtos
+                  </p>
 
-                  <p className="text-3xl">{totalQuantity}</p>
+                  <p className="text-5xl text-blue-50 font-bold">
+                     {productsQuantity}
+                  </p>
                </div>
 
-               <div className="w-md h-44 bg-green-400 rounded-2xl">
-                  <p>Lotes Válidos</p>
+               <div className="w-md h-44 bg-green-400 rounded-2xl p-8">
+                  <p className="text-2xl text-blue-50 font-medium">
+                     Lotes Válidos
+                  </p>
 
-                  <p>{totalBatches}</p>
+                  <p className="text-5xl text-blue-50 font-bold">
+                     {batchesValidQuantity}
+                  </p>
                </div>
 
-               <div className="w-md h-44 bg-orange-300 rounded-2xl">
-                  <p>Próximos do Vencimento</p>
+               <div className="w-md h-44 bg-orange-300 rounded-2xl p-8">
+                  <p className="text-2xl text-blue-50 font-medium">
+                     Próximos do Vencimento
+                  </p>
 
-                  <p>{totalExpiring}</p>
+                  <p className="text-5xl text-blue-50 font-bold">
+                     {batchesExpiringQuantity}
+                  </p>
                </div>
 
-               <div className="w-md h-44 bg-red-600 rounded-2xl">
-                  <p>Lotes Vencidos</p>
+               <div className="w-md h-44 bg-red-600 rounded-2xl p-8">
+                  <p className="text-2xl text-blue-50 font-medium">
+                     Lotes Vencidos
+                  </p>
 
-                  <p className="text-3xl">{totalExpired}</p>
+                  <p className="text-5xl text-blue-50 font-bold">
+                     {batchesExpiredQuantity}
+                  </p>
                </div>
             </div>
 
