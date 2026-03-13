@@ -6,3 +6,15 @@ export async function getBatchesValid(): Promise<Batch[]> {
 
    return response.data;
 }
+
+export async function getBatchesExpiringInDays(): Promise<Batch[]> {
+   const response = await api.get("/batches/expiring");
+
+   return response.data;
+}
+
+export async function getBatchesExpired(): Promise<Batch[]> {
+   const response = await api.get("/batches/expired");
+
+   return response.data.data;
+}
