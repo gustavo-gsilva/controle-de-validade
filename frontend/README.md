@@ -1,73 +1,163 @@
-# React + TypeScript + Vite
+# Informações do Front-End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Padrões adotados
 
-Currently, two official plugins are available:
+O frontend do projeto segue uma organização baseada em componentização e separação de responsabilidades, com o objetivo de manter o código mais organizado, reutilizável e fácil de evoluir.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A aplicação é construída utilizando React com TypeScript, consumindo a API do backend para exibir e gerenciar os dados do sistema de controle de validades.
 
-## React Compiler
+## Pages
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+As pages representam as páginas principais da aplicação e geralmente estão associadas às rotas do sistema.
 
-## Expanding the ESLint configuration
+Nesta camada ficam:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Estrutura geral da página
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Organização dos componentes
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Chamadas para hooks ou serviços responsáveis por buscar dados
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Components
+
+Os components são partes reutilizáveis da interface. Eles representam elementos da UI que podem ser utilizados em diferentes partes da aplicação.
+
+Nesta camada ficam:
+
+- Componentes visuais reutilizáveis
+
+- Estruturas de layout
+
+- Componentes de interface como cards, tabelas, botões e inputs
+
+## Services
+
+Os services são responsáveis por centralizar as chamadas para a API do backend. Essa camada evita que as requisições HTTP fiquem espalhadas pelo projeto.
+
+Nesta camada ficam:
+
+- Configuração do cliente HTTP
+
+- Funções para consumir endpoints da API
+
+- Organização das requisições por recurso (ex: products, batches)
+
+## Hooks
+
+Os hooks são responsáveis por encapsular lógicas reutilizáveis da aplicação, principalmente relacionadas a estado e comunicação com a API.
+
+Nesta camada ficam:
+
+- Lógica de busca de dados
+
+- Controle de estados de carregamento
+
+- Tratamento de erros
+
+- Reutilização de lógica entre componentes
+
+## Utils
+
+A pasta utils contém funções auxiliares utilizadas em diferentes partes do projeto.
+
+Nesta camada ficam:
+
+- Funções de formatação de datas
+
+- Helpers de manipulação de dados
+
+- Funções utilitárias gerais
+
+## Integração com o Backend
+
+O frontend se comunica com o backend através de uma API REST responsável por gerenciar os dados do sistema.
+
+As principais entidades consumidas pela aplicação são:
+
+- Product – Representa os produtos cadastrados no sistema
+
+- Batch – Representa os lotes associados aos produtos
+
+Esses dados são utilizados para construir funcionalidades como:
+
+- Cadastro de produtos
+
+- Cadastro de lotes
+
+- Visualização de produtos
+
+- Monitoramento de validade de lotes
+
+- Dashboard com informações gerais do sistema
+
+## Estrutura de pastas
+
+A estrutura do frontend foi organizada buscando manter separação clara entre interface, lógica e comunicação com a API.
+
+```text
+frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   ├── hooks/
+│   ├── utils/
+│   ├── styles/
+│   └── assets/
+├── public/
+├── package.json
+└── tsconfig.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Essa organização ajuda a:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Manter componentes reutilizáveis
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Evitar lógica duplicada
+
+- Separar interface de regras de dados
+
+- Facilitar manutenção e crescimento do projeto
+
+## Como rodar o frontend localmente
+
+Pré-requisitos
+
+Antes de iniciar o projeto, é necessário ter instalado na máquina:
+
+- Node.js
+
+- npm ou yarn
+
+Passos para execução
+
+Clone o repositório:
+
+```bash
+git clone <https://github.com/gustavo-gsilva/controle-de-validade>
 ```
+
+Acesse a pasta do frontend:
+
+```bash
+cd frontend
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Configure a URL da API:
+
+Crie um arquivo .env na raiz do frontend e configure a URL do backend:
+
+- VITE_API_URL=http://localhost:3000
+
+Inicie o projeto:
+
+npm run dev
+
+
+Após iniciar o servidor de desenvolvimento, a aplicação poderá ser acessada no navegador através do endereço exibido no terminal.
