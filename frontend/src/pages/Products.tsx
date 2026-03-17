@@ -1,11 +1,7 @@
-import DashboardLayout from "../layouts/DashboardLayout";
+import ProductsComponent from "../components/Products";
 
 function Products() {
-   return (
-      <DashboardLayout>
-         <h2></h2>
-      </DashboardLayout>
-   )
+   return <ProductsComponent />;
 }
 
 export default Products;

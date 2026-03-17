@@ -7,7 +7,7 @@ interface Props {
 
 function DashboardLayout({ children }: Props) {
    return (
-      <div className="flex h-screen bg-blue-50">
+      <div className="flex h-screen bg-blue-100">
          <Slidebar />
 
          <div className="flex flex-col flex-1">
