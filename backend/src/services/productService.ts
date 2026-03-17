@@ -25,6 +25,15 @@ export async function createProduct(data: {
    return prisma.product.create({ data });
 }
 
+export async function getProducts(page: number, limit: number) {
+   const skip = (page - 1) * limit;
+
+   return prisma.product.findMany({
+      take: limit,
+      skip: skip,
+   });
+}
+
 export async function listProducts() {
    return prisma.product.findMany({
       orderBy: { name: "asc" },

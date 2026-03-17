@@ -11,6 +11,7 @@ import {
 
 import {
    createProduct,
+   getProducts,
    findProductByNameAndBrand,
    listProducts,
    getProductById,
@@ -52,16 +53,25 @@ export async function createProductController(req: Request, res: Response) {
    }
 }
 
-export async function listProductController(_: Request, res: Response) {
+export async function listProductController(req: Request, res: Response) {
    try {
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+
       const products = await listProducts();
+
+      const productsPage = await getProducts(page, limit);
 
       if (products.length === 0)
          return res
             .status(200)
             .json({ data: [], message: "Nenhum produto cadastrado." });
 
-      return res.status(200).json(serializeBigInt(products));
+      if (isNaN(page) || isNaN(limit)) {
+         return res.status(200).json(serializeBigInt(productsPage));
+      } else if (products) {
+         return res.status(200).json(serializeBigInt(products));
+      }
    } catch (error) {
       console.error(error);
 
@@ -140,7 +150,10 @@ export async function inactivateProductIdController(
    }
 }
 
-export async function reactivateProductIdController(req: Request, res: Response) {
+export async function reactivateProductIdController(
+   req: Request,
+   res: Response
+) {
    try {
       const id = validateId(req.params.id);
 
