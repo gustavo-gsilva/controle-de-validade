@@ -29,6 +29,7 @@ export async function getProducts(page: number, limit: number) {
    const skip = (page - 1) * limit;
 
    return prisma.product.findMany({
+      orderBy: { name: "asc" },
       take: limit,
       skip: skip,
    });

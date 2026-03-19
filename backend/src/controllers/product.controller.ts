@@ -58,23 +58,33 @@ export async function listProductController(req: Request, res: Response) {
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
 
-      const products = await listProducts();
-
-      const productsPage = await getProducts(page, limit);
-
-      if (products.length === 0)
-         return res
-            .status(200)
-            .json({ data: [], message: "Nenhum produto cadastrado." });
-
+      // Se NÃO os parâmetros page e limit não for número → retorna tudo
       if (isNaN(page) || isNaN(limit)) {
-         return res.status(200).json(serializeBigInt(productsPage));
-      } else if (products) {
+         const products = await listProducts();
+
+         if (products.length === 0) {
+            return res.status(200).json({
+               data: [],
+               message: "Nenhum produto cadastrado.",
+            });
+         }
+
          return res.status(200).json(serializeBigInt(products));
       }
+
+      // Se os parâmetros page e limit for números  → retorna paginado
+      const productsPage = await getProducts(page, limit);
+
+      if (!productsPage || productsPage.length === 0) {
+         return res.status(200).json({
+            data: [],
+            message: "Nenhum produto encontrado nessa página.",
+         });
+      }
+
+      return res.status(200).json(serializeBigInt(productsPage));
    } catch (error) {
       console.error(error);
-
       return res.status(500).json({
          error: "Houve um erro inesperado ao buscar a lista de produtos.",
       });
