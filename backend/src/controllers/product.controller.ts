@@ -73,16 +73,16 @@ export async function listProductController(req: Request, res: Response) {
       }
 
       // Se os parâmetros page e limit for números  → retorna paginado
-      const productsPage = await getProducts(page, limit);
+      const paginatedProduct = await getProducts(page, limit);
 
-      if (!productsPage || productsPage.length === 0) {
+      if (!paginatedProduct || paginatedProduct.product.length === 0) {
          return res.status(200).json({
             data: [],
             message: "Nenhum produto encontrado nessa página.",
          });
       }
 
-      return res.status(200).json(serializeBigInt(productsPage));
+      return res.status(200).json(serializeBigInt(paginatedProduct));
    } catch (error) {
       console.error(error);
       return res.status(500).json({
