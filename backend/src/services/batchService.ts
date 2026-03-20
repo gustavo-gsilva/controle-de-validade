@@ -20,10 +20,13 @@ export async function createBatch(data: {
 export async function listBatchesValid() {
    const today = new Date();
 
+   const futureDate = new Date();
+   futureDate.setDate(today.getDate() + 15);
+
    return prisma.batch.findMany({
       where: {
          expiration_date: {
-            gt: today,
+            gt: futureDate,
          },
          deleted_at: null,
       },
