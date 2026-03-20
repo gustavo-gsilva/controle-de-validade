@@ -7,7 +7,6 @@ import warningIcon from "../assets/warning_triangle_icon_white.svg";
 import trendIcon from "../assets/trend_chart_icon_white.svg";
 
 import { getProducts } from "../services/productService";
-import type { Product } from "../types/productTypes";
 
 import {
    getBatchesValid,
@@ -18,7 +17,7 @@ import type { Batch } from "../types/batchTypes";
 
 function Cards() {
    // Variáveis de estado que armazenam arrays baseados nos types
-   const [products, setProducts] = useState<Product[]>([]);
+   const [products, setProducts] = useState<number>(0);
    const [batches, setBatches] = useState<Batch[]>([]);
    const [expiring, setExpiring] = useState<Batch[]>([]);
    const [expired, setExpired] = useState<Batch[]>([]);
@@ -32,7 +31,7 @@ function Cards() {
             const batchesExpiringData = await getBatchesExpiringInDays();
             const batchesExpiredData = await getBatchesExpired();
 
-            setProducts(productsData);
+            setProducts(productsData.totalProduct);
             setBatches(batchesValidData);
             setExpiring(batchesExpiringData);
             setExpired(batchesExpiredData);
@@ -44,7 +43,7 @@ function Cards() {
       loadCardsDashboard();
    }, []);
 
-   const productsQuantity = products.length;
+   const productsQuantity = products;
    const batchesValidQuantity = batches.length;
    const batchesExpiringQuantity = expiring.length;
    const batchesExpiredQuantity = expired.length;

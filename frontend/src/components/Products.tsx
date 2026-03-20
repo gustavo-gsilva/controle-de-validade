@@ -12,7 +12,7 @@ function ProductsComponent() {
    async function loadProducts() {
       const productData = await getProducts();
 
-      setProducts(productData);
+      setProducts(productData.product);
    }
 
    useEffect(() => {
@@ -59,14 +59,25 @@ function ProductsComponent() {
 
                   <div>
                      {products.map((product) => (
-                        <ul key={product.id} className="grid grid-cols-4 items-center border-b border-gray-400 px-5">
-                           <li className="text-[1.4rem] font-medium py-5">{product.brand}</li>
+                        <ul
+                           key={product.id}
+                           className="grid grid-cols-4 items-center border-b border-gray-400 px-5"
+                        >
+                           <li className="text-[1.4rem] font-medium py-5">
+                              {product.brand}
+                           </li>
 
-                           <li className="text-[1.4rem] font-medium">{product.name}</li>
+                           <li className="text-[1.4rem] font-medium">
+                              {product.name}
+                           </li>
 
-                           <li className="text-[1.4rem] font-medium text-gray-700">{product.code}</li>
+                           <li className="text-[1.4rem] font-medium text-gray-700">
+                              {product.code}
+                           </li>
 
-                           <li className="text-[1.4rem] font-medium text-gray-700">{product.category}</li>
+                           <li className="text-[1.4rem] font-medium text-gray-700">
+                              {product.category}
+                           </li>
                         </ul>
                      ))}
                   </div>
