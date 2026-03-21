@@ -5,8 +5,3 @@ export type Product = {
    category: string;
    code: string;
 };
-
-export type ProductsResponse = {
-   product: Product[];
-   totalProduct: number;
-};

@@ -1,9 +1,9 @@
 import { api } from "./api";
-import type { ProductsResponse } from "../types/productTypes";
+import type { Product } from "../types/productTypes";
 
-// Função que retorna uma promise baseada no type ProductResponse
-export async function getProducts(): Promise<ProductsResponse> {
-   const response = await api.get("/products?page=1&limit=4");
+// Função que retorna uma promise baseada no type Product
+export async function getProducts(): Promise<Product[]> {
+   const response = await api.get("/products");
 
    return response.data;
 }

@@ -11,7 +11,6 @@ import {
 
 import {
    createProduct,
-   getProducts,
    findProductByNameAndBrand,
    listProducts,
    getProductById,
@@ -53,36 +52,18 @@ export async function createProductController(req: Request, res: Response) {
    }
 }
 
-export async function listProductController(req: Request, res: Response) {
+export async function listProductController(_: Request, res: Response) {
    try {
-      const page = Number(req.query.page);
-      const limit = Number(req.query.limit);
+      const products = await listProducts();
 
-      // Se NÃO os parâmetros page e limit não for número → retorna tudo
-      if (isNaN(page) || isNaN(limit)) {
-         const products = await listProducts();
-
-         if (products.length === 0) {
-            return res.status(200).json({
-               data: [],
-               message: "Nenhum produto cadastrado.",
-            });
-         }
-
-         return res.status(200).json(serializeBigInt(products));
-      }
-
-      // Se os parâmetros page e limit for números  → retorna paginado
-      const paginatedProduct = await getProducts(page, limit);
-
-      if (!paginatedProduct || paginatedProduct.product.length === 0) {
+      if (products.length === 0) {
          return res.status(200).json({
             data: [],
-            message: "Nenhum produto encontrado nessa página.",
+            message: "Nenhum produto cadastrado.",
          });
       }
 
-      return res.status(200).json(serializeBigInt(paginatedProduct));
+      return res.status(200).json(serializeBigInt(products));
    } catch (error) {
       console.error(error);
       return res.status(500).json({

@@ -14,10 +14,11 @@ import {
    getBatchesExpired,
 } from "../services/batchService";
 import type { Batch } from "../types/batchTypes";
+import type { Product } from "../types/productTypes";
 
 function Cards() {
    // Variáveis de estado que armazenam arrays baseados nos types
-   const [products, setProducts] = useState<number>(0);
+   const [products, setProducts] = useState<Product[]>([]);
    const [batches, setBatches] = useState<Batch[]>([]);
    const [expiring, setExpiring] = useState<Batch[]>([]);
    const [expired, setExpired] = useState<Batch[]>([]);
@@ -31,7 +32,7 @@ function Cards() {
             const batchesExpiringData = await getBatchesExpiringInDays();
             const batchesExpiredData = await getBatchesExpired();
 
-            setProducts(productsData.totalProduct);
+            setProducts(productsData);
             setBatches(batchesValidData);
             setExpiring(batchesExpiringData);
             setExpired(batchesExpiredData);
@@ -43,7 +44,7 @@ function Cards() {
       loadCardsDashboard();
    }, []);
 
-   const productsQuantity = products;
+   const productsQuantity = products.length;
    const batchesValidQuantity = batches.length;
    const batchesExpiringQuantity = expiring.length;
    const batchesExpiredQuantity = expired.length;

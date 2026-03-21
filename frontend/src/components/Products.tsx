@@ -12,7 +12,7 @@ function ProductsComponent() {
    async function loadProducts() {
       const productData = await getProducts();
 
-      setProducts(productData.product);
+      setProducts(productData);
    }
 
    useEffect(() => {
@@ -57,28 +57,28 @@ function ProductsComponent() {
                      </p>
                   </div>
 
-                  <div>
+                  <div className="max-h-[55vh] overflow-y-auto scroll-smooth">
                      {products.map((product) => (
-                        <ul
+                        <div
                            key={product.id}
                            className="grid grid-cols-4 items-center border-b border-gray-400 px-5"
                         >
-                           <li className="text-[1.4rem] font-medium py-5">
+                           <p className="text-[1.4rem] font-medium py-5">
                               {product.brand}
-                           </li>
+                           </p>
 
-                           <li className="text-[1.4rem] font-medium">
+                           <p className="text-[1.4rem] font-medium">
                               {product.name}
-                           </li>
+                           </p>
 
-                           <li className="text-[1.4rem] font-medium text-gray-700">
+                           <p className="text-[1.4rem] font-medium text-gray-700">
                               {product.code}
-                           </li>
+                           </p>
 
-                           <li className="text-[1.4rem] font-medium text-gray-700">
+                           <p className="text-[1.4rem] font-medium text-gray-700">
                               {product.category}
-                           </li>
-                        </ul>
+                           </p>
+                        </div>
                      ))}
                   </div>
                </div>
