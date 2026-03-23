@@ -1,10 +1,8 @@
-import DashboardLayout from "../layouts/DashboardLayout";
+import BatchesComponent from "../components/Batches";
 
 function Batches() {
    return (
-      <DashboardLayout>
-         <h2></h2>
-      </DashboardLayout>
+      <BatchesComponent />
    );
 }
 
