@@ -19,8 +19,17 @@ export async function createBatch(data: {
 
 export async function listBatches() {
    return prisma.batch.findMany({
+      include: {
+         product: {
+            select: {
+               id: true,
+               name: true,
+            },
+         },
+      },
+
       orderBy: {
-         product_id: "asc",
+         id: "asc",
       },
    });
 }

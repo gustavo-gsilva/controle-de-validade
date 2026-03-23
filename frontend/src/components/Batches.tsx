@@ -11,6 +11,7 @@ function BatchesComponent() {
 
    async function loadBatches() {
       const batchData = await getBatches();
+      console.log(batchData);
 
       setBatches(batchData);
    }
@@ -18,6 +19,11 @@ function BatchesComponent() {
    useEffect(() => {
       loadBatches();
    }, []);
+
+   // Função que converte a data para o formato de calendário
+   const formatDate = (dateString: string) => {
+      return new Date(dateString).toLocaleDateString("pt-BR");
+   };
 
    return (
       <DashboardLayout>
@@ -39,7 +45,11 @@ function BatchesComponent() {
                <div className="border border-b-gray-400 mt-7"></div>
 
                <div className="px-8 mt-7">
-                  <div className="grid grid-cols-4 bg-gray-300 rounded-[0.4rem] py-3.5 px-5">
+                  <div className="grid grid-cols-5 bg-gray-300 rounded-[0.4rem] py-3.5 px-5">
+                     <p className="text-[1.3rem] font-medium text-gray-700">
+                        Id
+                     </p>
+
                      <p className="text-[1.3rem] font-medium text-gray-700">
                         Nome
                      </p>
@@ -47,20 +57,40 @@ function BatchesComponent() {
                      <p className="text-[1.3rem] font-medium text-gray-700">
                         Código
                      </p>
+
+                     <p className="text-[1.3rem] font-medium text-gray-700">
+                        Entrada
+                     </p>
+
+                     <p className="text-[1.3rem] font-medium text-gray-700">
+                        Vencimento
+                     </p>
                   </div>
 
                   <div className="max-h-[55vh] overflow-y-auto scroll-smooth">
                      {batches.map((batch) => (
                         <div
                            key={batch.id}
-                           className="grid grid-cols-4 items-center border-b border-gray-400 px-5"
+                           className="grid grid-cols-5 items-center border-b border-gray-400 px-5"
                         >
-                           <p className="text-[1.4rem] font-medium">
-                              {batch.product_id}
+                           <p className="text-[1.4rem] font-medium py-5">
+                              {batch.id}
+                           </p>
+
+                           <p className="text-[1.4rem] font-medium text-gray-700">
+                              {batch.product.name}
                            </p>
 
                            <p className="text-[1.4rem] font-medium text-gray-700">
                               {batch.batch_code}
+                           </p>
+
+                           <p className="text-[1.4rem] font-medium text-gray-700">
+                              {formatDate(batch.entry_date)}
+                           </p>
+
+                           <p className="text-[1.4rem] font-medium text-gray-700">
+                              {formatDate(batch.expiration_date)}
                            </p>
                         </div>
                      ))}
