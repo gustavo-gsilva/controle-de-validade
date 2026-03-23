@@ -4,6 +4,7 @@ import { getProductById } from "../services/productService.js";
 import { findProductByBatchCode } from "../services/batchService.js";
 import {
    createBatch,
+   listBatches,
    listBatchesValid,
    listBatchesProductById,
    updateBatchesProductById,
@@ -54,6 +55,30 @@ export async function createBatchController(req: Request, res: Response) {
       return res
          .status(500)
          .json({ error: "Houve um erro ao cadastrar o lote do produto." });
+   }
+}
+
+export async function listBatchesController(_: Request, res: Response) {
+   try {
+      const batches = await listBatches();
+
+      if (batches.length === 0) {
+         return res.status(200).json({
+            data: [],
+            message: "Nenhum lote cadastrado.",
+         });
+      }
+
+      return res.status(200).json(serializeBigInt(batches));
+   } catch (error) {
+      if (error instanceof AppError) {
+         return res.status(error.statusCode).json({ error: error.message });
+      }
+
+      console.error(error);
+      return res
+         .status(500)
+         .json({ error: "Houve um erro ao listar os lotes." });
    }
 }
 

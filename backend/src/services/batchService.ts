@@ -17,6 +17,14 @@ export async function createBatch(data: {
    return prisma.batch.create({ data });
 }
 
+export async function listBatches() {
+   return prisma.batch.findMany({
+      orderBy: {
+         product_id: "asc",
+      },
+   });
+}
+
 export async function listBatchesValid() {
    const today = new Date();
 
